@@ -1,0 +1,40 @@
+title: PACE
+description: Build, configure and use the PACE calendar display.
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+plugins:
+  - jekyll-optional-front-matter
+  - jekyll-relative-links
+  - jekyll-readme-index
+  - jekyll-titles-from-headings
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
+include:
+  - .esp-idf-version
+  - adapters/service/.env.example
+exclude:
+  - AGENTS.md
+  - build
+  - build-*
+  - firmware/build
+  - firmware/build-*
+  - firmware/managed_components
+  - firmware/sdkconfig
+  - firmware/sdkconfig.old
+  - local
+  - private
+  - secrets
+  - credentials
+  - .venv
+  - venv
+  - node_modules
+  - adapters/service/node_modules
+  - vendor
+  - Gemfile
+  - Gemfile.lock
+  - tools/__pycache__

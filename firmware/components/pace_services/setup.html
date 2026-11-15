@@ -1,0 +1,777 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PACE setup</title>
+<style>
+body{font:17px system-ui,sans-serif;max-width:680px;margin:32px auto;padding:0 20px;color:#192b35;background:#f6f8f7}
+h1{font-size:32px}
+fieldset{background:white;border:1px solid #cbd7d5;border-radius:12px;margin:18px 0;padding:20px}
+legend{font-weight:650}
+label{display:block;margin:12px 0}
+input,select,button,textarea{font:inherit;box-sizing:border-box;padding:10px;border:1px solid #9aaeb1;border-radius:6px}
+input:not([type=checkbox]):not([type=color]),select,textarea{display:block;width:100%;margin-top:5px}
+button{background:#145b52;color:white;cursor:pointer;margin:6px 6px 6px 0}
+small{color:#485c67}
+#message{white-space:pre-wrap}
+summary{cursor:pointer}
+#settingsFields{border:0;background:none;padding:0;margin:0}
+.category{display:flex;gap:8px}
+.category input{min-width:0}
+a{color:#145b52}
+</style>
+<h1>Set up PACE</h1>
+<label>Language / Sprache<select id="language"><option value="en">English</option><option value="de">Deutsch</option></select></label>
+<p>Keep this page open on the PACE Wi-Fi network. Settings take effect after restart.</p>
+
+<p><strong>Development firmware:</strong> the default build stores data unencrypted. Use synthetic calendars and disposable credentials until you provision the household security profile.</p>
+
+<p id="settingsStatus" role="status">Loading saved settings…</p>
+<button id="loadSettings" type="button" hidden>Reload saved settings</button>
+<form id="setup">
+<fieldset id="settingsFields" disabled>
+<fieldset>
+<legend>1 · Home Wi-Fi</legend>
+
+<label>Network name (2.4 GHz)<input id="ssid" required maxlength="32" autocomplete="off"></label>
+
+<label>Password<input id="password" type="password" maxlength="63" autocomplete="new-password"></label>
+
+<label><input id="openNetwork" type="checkbox"> Use an open network (no password)</label>
+<small>Saved private fields stay hidden. Leave them blank to keep them, or enter a replacement. A new network name requires its password or the open-network option.</small>
+</fieldset>
+
+<fieldset>
+<legend>2 · Calendar</legend>
+
+<label>Source<select id="profile"><option value="demo">Demo — synthetic events, UTC</option><option value="google_apps_script">Google Apps Script</option><option value="generic_https">Calendar feed (Outlook or another adapter)</option></select></label>
+
+<div id="feed" hidden>
+<label>Adapter HTTPS endpoint<input id="endpoint" type="url" maxlength="512" autocomplete="off"></label>
+
+<label>Pairing secret<input id="secret" type="password" maxlength="128" autocomplete="new-password"></label>
+
+<small>Create your adapter using the project's calendar guide first. Never paste your email account password here.</small>
+<small>When changing the adapter address or source, enter its pairing secret again.</small>
+</div>
+</fieldset>
+
+<fieldset>
+<legend>3 · Display</legend>
+
+<label>Time zone<input id="zone" required maxlength="64" placeholder="IANA zone, e.g. Europe/Berlin"></label>
+
+<label>Date-label locale<input id="locale" required maxlength="32" placeholder="e.g. en-GB"></label>
+
+<small>English and German controls are available. Latin letters, umlauts and ß are supported; other unsupported characters are reported on screen.</small>
+
+<label>Time format<select id="cycle"><option value="h23">24-hour</option><option value="h12">12-hour</option></select></label>
+
+<label>Temperature<select id="unit"><option>C</option><option>F</option></select></label>
+
+<label><input id="night" type="checkbox"> Blank the backlight at night</label>
+
+<label>From<input id="nightStart" type="time" value="22:00" required></label>
+
+<label>Until<input id="nightEnd" type="time" value="07:00" required></label>
+
+<label>Second calendar highlight<input id="secondaryColor" type="color" value="#7251a6"></label>
+<small>An optional second calendar (for example birthdays) is selected in your adapter. Main appointments stay first; the second calendar uses this accent and its own label.</small>
+
+<details>
+<summary>Category colors (optional)</summary>
+<p>Enter IDs from your adapter, up to eight. Labels come from the feed.</p>
+
+<div id="categories"></div>
+<button id="add" type="button">Add color</button>
+</details>
+</fieldset>
+
+<fieldset>
+<legend>4 · Outdoor temperature (optional)</legend>
+
+<label><input id="weather" type="checkbox"> Enable Open-Meteo</label>
+
+<small>Enter the coordinates in separate fields: for example latitude 48.1234 and longitude 8.5678. Use a decimal point (.), not a decimal comma. Latitude: -90 to 90; longitude: -180 to 180. Negative values mean south or west. Replace the example with your own location; the label alone does not select the weather location.</small>
+
+<label>Location label<input id="location" maxlength="64"></label>
+
+<label>Latitude<input id="latitude" placeholder="48.1234" type="number" step="any" min="-90" max="90"></label>
+
+<label>Longitude<input id="longitude" placeholder="8.5678" type="number" step="any" min="-180" max="180"></label>
+
+<small>Coordinates and the device IP are sent to Open-Meteo. Its free service is for non-commercial use. Weather: Open-Meteo.</small>
+</fieldset>
+
+<fieldset>
+<legend>5 · Firmware updates (optional)</legend>
+<label>HTTPS update manifest<input id="updateSource" type="url" maxlength="512" placeholder="https://..."></label>
+<label><input id="clearUpdateSource" type="checkbox"> Remove the saved HTTPS update source</label>
+<small>File uploads work with or without an HTTPS update source. No hosting account is required.</small>
+</fieldset>
+
+<fieldset>
+<legend>6 · Traffic (optional)</legend>
+<label><input id="traffic" type="checkbox"> Enable Traffic</label>
+<small>Calendar remains the home screen. Open routing needs no API key or billing. Car times exclude live congestion; transit coverage and live delays depend on local data. Reopen Traffic to request fresh estimates.</small>
+<label>Routing service<select id="trafficProvider"><option value="open">Open routing (no key)</option><option value="google_routes">Google Routes (billing required)</option></select></label>
+<div id="openRouting">
+<p>For both start and destination, enter latitude, longitude, for example 48.1234, 8.5678. Use a decimal point (.) and one comma between the numbers. Latitude: -90 to 90; longitude: -180 to 180. Negative values mean south or west. In OpenStreetMap, right-click a place and choose Show address to find its coordinates. Replace the example with your own location.</p>
+<label>Contact email or public website (required for transit)<input id="trafficContact" maxlength="128" autocomplete="off"></label>
+<small>The community transit server requires a client contact. This is sent in the request header, stored privately on the device, and never published by PACE. Use a project contact if available. Public Transitous is for light, open-source, non-commercial use.</small>
+<details><summary>Advanced routing servers</summary>
+<label>OSRM car server<input id="roadEndpoint" type="url" maxlength="256" value="https://routing.openstreetmap.de/routed-car"></label>
+<label>MOTIS plan endpoint<input id="transitEndpoint" type="url" maxlength="256" value="https://api.transitous.org/api/v6/plan"></label>
+<label>Street-map tile server<input id="tileEndpoint" type="url" maxlength="256" value="https://tile.openstreetmap.org"></label>
+<small>Keep these defaults for community services, or enter compatible HTTPS servers you operate. No credentials or query parameters in these URLs.</small>
+</details>
+<p><a href="https://routing.openstreetmap.de/about.html" target="_blank" rel="noopener">OSRM service rules</a> · <a href="https://transitous.org/api/" target="_blank" rel="noopener">Transitous service rules</a> · <a href="https://transitous.org/sources/" target="_blank" rel="noopener">Transit data sources</a> · <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap contributors</a> · <a href="https://www.openstreetmap.org/fixthemap" target="_blank" rel="noopener">Fix the map</a></p>
+</div>
+<label id="googleRouting" hidden>Google Routes API key<input id="trafficKey" type="password" maxlength="128" autocomplete="new-password"></label>
+<label id="clearTrafficKeyRow" hidden><input id="clearTrafficKey" type="checkbox"> Remove the saved Google Routes API key</label>
+<div id="routes"></div>
+<button id="addRoute" type="button">Add route</button>
+<p><small>The selected servers receive endpoint coordinates or addresses and your public IP; they may keep request logs. Route previews stay in memory and are not saved with the calendar.</small></p>
+<p><a href="https://developers.google.com/maps/documentation/routes/get-api-key" target="_blank" rel="noopener">Provider setup and quotas</a> · <a href="https://maps.google.com/help/terms_maps/" target="_blank" rel="noopener">Google Maps terms</a> · <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google privacy</a></p>
+</fieldset>
+
+<button type="button" id="preview">Preview settings</button>
+
+<button type="submit">Save and restart</button>
+
+<p id="previewText"></p>
+</fieldset>
+</form>
+
+<p id="message" role="status" aria-live="polite"></p>
+
+<details>
+<summary>Diagnostics and recovery</summary>
+<p id="diagnostics"></p>
+
+<button id="refresh">Refresh diagnostics</button>
+
+<label>Signed firmware file (.bin)<input id="firmwareFile" type="file" accept=".bin,application/octet-stream"></label>
+<button id="upload" disabled>Upload and install</button>
+<progress id="uploadProgress" max="100" value="0" hidden></progress>
+<p>Install a signed firmware build once by USB. Later, select a file signed with the same key. Keep USB power connected; the device checks the file before restarting.</p>
+
+<button id="sync">Sync calendar now</button>
+
+<button id="update" disabled>Install signed update</button>
+
+<p>Signed firmware is required. File uploads work without hosting; HTTPS updates use an optional manifest URL.</p>
+
+<label>Type ERASE to delete Wi-Fi, settings and cached appointments<input id="confirmation" autocomplete="off"></label>
+<button id="reset">Factory reset</button>
+
+<p>Hold Settings on the device to reopen setup. This network closes after 15 minutes without activity. Typing and tapping keep it open.</p>
+</details>
+
+<script nonce="@TOKEN@">
+
+
+'use strict';
+const token = '@TOKEN@';
+const el = id => document.getElementById(id);
+
+const translations = {
+  'Coordinates: 48.1234, 8.5678': 'Koordinaten: 48.1234, 8.5678',
+  'Street, city, country': 'Straße, Ort, Land',
+  'Weather needs a label and separate valid latitude and longitude values. Example: latitude 48.1234, longitude 8.5678.': 'Wetter benötigt einen Namen sowie getrennte gültige Werte für Breitengrad und Längengrad. Beispiel: Breitengrad 48.1234, Längengrad 8.5678.',
+  'Loading saved settings…': 'Gespeicherte Einstellungen werden geladen…',
+  'Reload saved settings': 'Gespeicherte Einstellungen neu laden',
+  'Saved settings loaded. Change only what you need.': 'Gespeicherte Einstellungen geladen. Nur gewünschte Werte ändern.',
+  'No settings saved yet. Complete the fields below.': 'Noch keine Einstellungen gespeichert. Die folgenden Felder ausfüllen.',
+  'Could not load saved settings. Reconnect to PACE Wi-Fi and retry before saving.': 'Gespeicherte Einstellungen konnten nicht geladen werden. Erneut mit dem PACE-WLAN verbinden und vor dem Speichern neu laden.',
+  'Saved — leave blank to keep': 'Gespeichert — zum Beibehalten leer lassen',
+  'Use an open network (no password)': 'Offenes Netzwerk verwenden (ohne Passwort)',
+  'Saved private fields stay hidden. Leave them blank to keep them, or enter a replacement. A new network name requires its password or the open-network option.': 'Gespeicherte private Felder bleiben verborgen. Zum Beibehalten leer lassen oder einen neuen Wert eingeben. Ein neuer Netzwerkname benötigt das Passwort oder die Option für ein offenes Netzwerk.',
+  'When changing the adapter address or source, enter its pairing secret again.': 'Beim Ändern der Adapteradresse oder Quelle den Kopplungsschlüssel erneut eingeben.',
+  'Enter the password for the new network, or select an open network.': 'Passwort des neuen Netzwerks eingeben oder ein offenes Netzwerk auswählen.',
+  'Enter the pairing secret for the changed adapter.': 'Kopplungsschlüssel des geänderten Adapters eingeben.',
+  'Remove the saved Google Routes API key': 'Gespeicherten Google-Routes-API-Schlüssel entfernen',
+  'Remove the saved HTTPS update source': 'Gespeicherte HTTPS-Updatequelle entfernen',
+  'File uploads work with or without an HTTPS update source. No hosting account is required.': 'Dateiuploads funktionieren mit und ohne HTTPS-Updatequelle. Ein Hostingkonto ist nicht nötig.',
+  'Saved settings could not be read. Nothing was changed.': 'Gespeicherte Einstellungen konnten nicht gelesen werden. Nichts wurde geändert.',
+  "Second calendar highlight": "Hervorhebung des zweiten Kalenders",
+  "An optional second calendar (for example birthdays) is selected in your adapter. Main appointments stay first; the second calendar uses this accent and its own label.": "Ein optionaler zweiter Kalender (z. B. Geburtstage) wird im Adapter ausgewählt. Haupttermine stehen zuerst; der zweite Kalender nutzt diese Akzentfarbe und seinen eigenen Namen.",
+  "Street-map tile server": "Server für Straßenkartenkacheln",
+  "Routing service": "Routingdienst",
+  "Open routing (no key)": "Offenes Routing (ohne Schlüssel)",
+  "Google Routes (billing required)": "Google Routes (Abrechnung erforderlich)",
+  "For both start and destination, enter latitude, longitude, for example 48.1234, 8.5678. Use a decimal point (.) and one comma between the numbers. Latitude: -90 to 90; longitude: -180 to 180. Negative values mean south or west. In OpenStreetMap, right-click a place and choose Show address to find its coordinates. Replace the example with your own location.": "Für Start und Ziel Breitengrad, Längengrad eingeben, zum Beispiel 48.1234, 8.5678. Dezimalpunkt (.) und genau ein Komma zwischen den Zahlen verwenden. Breitengrad: -90 bis 90; Längengrad: -180 bis 180. Negative Werte bedeuten Süden oder Westen. In OpenStreetMap rechtsklicken und Adresse anzeigen wählen, um die Koordinaten zu finden. Beispiel durch den eigenen Ort ersetzen.",
+  "Contact email or public website (required for transit)": "Kontakt-E-Mail oder öffentliche Website (für ÖPNV erforderlich)",
+  "The community transit server requires a client contact. This is sent in the request header, stored privately on the device, and never published by PACE. Use a project contact if available. Public Transitous is for light, open-source, non-commercial use.": "Der ÖPNV-Gemeinschaftsserver benötigt einen Kontakt. Dieser wird im Anfragekopf gesendet, privat auf dem Gerät gespeichert und von PACE nicht veröffentlicht. Möglichst einen Projektkontakt verwenden. Öffentliches Transitous ist für sparsame, quelloffene, nicht kommerzielle Nutzung.",
+  "Advanced routing servers": "Erweiterte Routingserver",
+  "OSRM car server": "OSRM-Autoserver",
+  "MOTIS plan endpoint": "MOTIS-Planungsadresse",
+  "Keep these defaults for community services, or enter compatible HTTPS servers you operate. No credentials or query parameters in these URLs.": "Standardwerte für Gemeinschaftsdienste beibehalten oder eigene kompatible HTTPS-Server eintragen. Keine Zugangsdaten oder Abfrageparameter in diesen URLs.",
+  "OSRM service rules": "OSRM-Nutzungsregeln",
+  "Transitous service rules": "Transitous-Nutzungsregeln",
+  "Transit data sources": "ÖPNV-Datenquellen",
+  "© OpenStreetMap contributors": "© OpenStreetMap-Mitwirkende",
+  "Fix the map": "Karte korrigieren",
+  "Add one to four complete routes.": "Ein bis vier vollständige Wege hinzufügen.",
+  "Open routing needs latitude, longitude for both endpoints.": "Offenes Routing benötigt Breitengrad, Längengrad für Start und Ziel.",
+  "Check the HTTPS routing server URLs.": "HTTPS-Adressen der Routingserver prüfen.",
+  "Enter a contact email or public website for the transit service.": "Kontakt-E-Mail oder öffentliche Website für den ÖPNV-Dienst eintragen.",
+  "Check the Google Routes API key.": "Google-Routes-API-Schlüssel prüfen.",
+
+  "6 · Traffic (optional)": "6 · Verkehr (optional)",
+  "Enable Traffic": "Verkehr aktivieren",
+  "Calendar remains the home screen. Open routing needs no API key or billing. Car times exclude live congestion; transit coverage and live delays depend on local data. Reopen Traffic to request fresh estimates.": "Der Kalender bleibt die Startansicht. Offenes Routing braucht weder API-Schlüssel noch Abrechnung. Autozeiten enthalten keine aktuellen Staus; ÖPNV und Echtzeitdaten hängen von lokalen Daten ab. Verkehr neu öffnen, um zu aktualisieren.",
+  "Google Routes API key": "Google-Routes-API-Schlüssel",
+  "Add route": "Weg hinzufügen",
+  "The selected servers receive endpoint coordinates or addresses and your public IP; they may keep request logs. Route previews stay in memory and are not saved with the calendar.": "Die gewählten Server erhalten Koordinaten oder Adressen und deine öffentliche IP; sie können Anfragen protokollieren. Routenvorschauen bleiben im Arbeitsspeicher und werden nicht mit dem Kalender gespeichert.",
+  "Provider setup and quotas": "Anbietereinrichtung und Kontingente",
+  "Google Maps terms": "Google-Maps-Nutzungsbedingungen",
+  "Google privacy": "Google-Datenschutz",
+  "Route name": "Name des Weges",
+  "Origin (coordinates or Google address)": "Start (Koordinaten oder Google-Adresse)",
+  "Destination (coordinates or Google address)": "Ziel (Koordinaten oder Google-Adresse)",
+  "Travel mode": "Verkehrsmittel",
+  "Car": "Auto",
+  "Public transport": "ÖPNV",
+
+
+  'Enter the coordinates in separate fields: for example latitude 48.1234 and longitude 8.5678. Use a decimal point (.), not a decimal comma. Latitude: -90 to 90; longitude: -180 to 180. Negative values mean south or west. Replace the example with your own location; the label alone does not select the weather location.':
+      'Koordinaten getrennt eingeben: zum Beispiel Breitengrad 48.1234 und Längengrad 8.5678. Dezimalpunkt (.) statt Dezimalkomma verwenden. Breitengrad: -90 bis 90; Längengrad: -180 bis 180. Negative Werte bedeuten Süden oder Westen. Beispiel durch den eigenen Ort ersetzen; der Name allein bestimmt den Wetterort nicht.',
+  '5 · Firmware updates (optional)': '5 · Firmwareupdates (optional)',
+  'HTTPS update manifest': 'HTTPS-Adresse des Updatemanifests',
+
+  'Signed firmware file (.bin)': 'Signierte Firmwaredatei (.bin)',
+  'Upload and install': 'Hochladen und installieren',
+  'Install a signed firmware build once by USB. Later, select a file signed with the same key. Keep USB power connected; the device checks the file before restarting.':
+      'Einmal signierte Firmware per USB installieren. Danach eine mit demselben Schlüssel signierte Datei auswählen. USB-Stromversorgung angeschlossen lassen; das Gerät prüft die Datei vor dem Neustart.',
+  'Select a firmware .bin file up to 3 MiB.':
+      'Eine Firmwaredatei (.bin) mit höchstens 3 MiB auswählen.',
+  'Install this signed firmware file? Keep USB power connected.':
+      'Diese signierte Firmwaredatei installieren? USB-Stromversorgung angeschlossen lassen.',
+  'Uploading. Keep this page open and USB power connected.':
+      'Datei wird hochgeladen. Seite geöffnet und USB-Stromversorgung angeschlossen lassen.',
+  'Upload sent. Verifying signature; check the device screen.':
+      'Datei gesendet. Signatur wird geprüft; Display beachten.',
+  'Invalid firmware size.': 'Ungültige Dateigröße.',
+  'Update could not start. Wait and retry.':
+      'Update konnte nicht starten. Warten und erneut versuchen.',
+  'Update failed or was rejected. Current firmware retained.':
+      'Update fehlgeschlagen oder abgelehnt. Bisherige Firmware bleibt erhalten.',
+  'Update installed. Restarting. Keep USB power connected.':
+      'Update installiert. Neustart. USB-Stromversorgung angeschlossen lassen.',
+  'PACE setup': 'PACE einrichten',
+  'Set up PACE': 'PACE einrichten',
+  'Keep this page open on the PACE Wi-Fi network. Settings take effect after restart.':
+      'Diese Seite im PACE-WLAN geöffnet lassen. Einstellungen gelten nach dem Neustart.',
+  'Development firmware:': 'Entwicklungsfirmware:',
+  'the default build stores data unencrypted. Use synthetic calendars and disposable credentials until you provision the household security profile.':
+      'Die Standardfirmware speichert Daten unverschlüsselt. Bis zur Einrichtung des Sicherheitsprofils nur Testkalender und Testzugangsdaten verwenden.',
+  '1 · Home Wi-Fi': '1 · Heim-WLAN',
+  'Network name (2.4 GHz)': 'Netzwerkname (2,4 GHz)',
+  'Password': 'Passwort',
+
+  '2 · Calendar': '2 · Kalender',
+  'Source': 'Quelle',
+  'Demo — synthetic events, UTC': 'Demo — Testtermine, UTC',
+  'Calendar feed (Outlook or another adapter)': 'Kalenderfeed (Outlook oder anderer Adapter)',
+  'Adapter HTTPS endpoint': 'HTTPS-Adresse des Adapters',
+  'Pairing secret': 'Kopplungsschlüssel',
+  'Create your adapter using the project\'s calendar guide first. Never paste your email account password here.':
+      'Zuerst den Adapter nach der Kalenderanleitung einrichten. Hier niemals das Passwort des E-Mail-Kontos eingeben.',
+  '3 · Display': '3 · Anzeige',
+  'Time zone': 'Zeitzone',
+  'Date-label locale': 'Sprache der Datumsanzeige',
+  'English and German controls are available. Latin letters, umlauts and ß are supported; other unsupported characters are reported on screen.':
+      'Bedienung auf Deutsch und Englisch. Lateinische Buchstaben, Umlaute und ß werden unterstützt. Andere fehlende Zeichen werden auf dem Display gemeldet.',
+  'Time format': 'Zeitformat',
+  '24-hour': '24 Stunden',
+  '12-hour': '12 Stunden',
+  'Temperature': 'Temperatur',
+  'Blank the backlight at night': 'Hintergrundbeleuchtung nachts ausschalten',
+  'From': 'Von',
+  'Until': 'Bis',
+  'Category colors (optional)': 'Kategoriefarben (optional)',
+  'Enter IDs from your adapter, up to eight. Labels come from the feed.':
+      'Bis zu acht Kennungen aus dem Adapter eingeben. Bezeichnungen stammen aus dem Feed.',
+  'Add color': 'Farbe hinzufügen',
+  '4 · Outdoor temperature (optional)': '4 · Außentemperatur (optional)',
+  'Enable Open-Meteo': 'Open-Meteo aktivieren',
+  'Location label': 'Ortsname',
+  'Latitude': 'Breitengrad',
+  'Longitude': 'Längengrad',
+  'Coordinates and the device IP are sent to Open-Meteo. Its free service is for non-commercial use. Weather: Open-Meteo.':
+      'Koordinaten und Geräte-IP werden an Open-Meteo gesendet. Der kostenlose Dienst ist für nichtkommerzielle Nutzung. Wetter: Open-Meteo.',
+  'Preview settings': 'Einstellungen prüfen',
+  'Save and restart': 'Speichern und neu starten',
+  'Diagnostics and recovery': 'Diagnose und Wiederherstellung',
+  'Refresh diagnostics': 'Diagnose aktualisieren',
+  'Sync calendar now': 'Kalender jetzt synchronisieren',
+  'Install signed update': 'Signiertes Update installieren',
+  'Signed firmware is required. File uploads work without hosting; HTTPS updates use an optional manifest URL.':
+      'Signierte Firmware ist erforderlich. Datei-Uploads benötigen kein Hosting; HTTPS-Updates verwenden eine optionale Manifest-URL.',
+  'Type ERASE to delete Wi-Fi, settings and cached appointments':
+      'ERASE eingeben, um WLAN, Einstellungen und gespeicherte Termine zu löschen',
+  'Factory reset': 'Werkseinstellungen',
+  'Hold Settings on the device to reopen setup. This network closes after 15 minutes without activity. Typing and tapping keep it open.':
+      'Einstellungen am Gerät gedrückt halten, um die Einrichtung zu öffnen. Das Netzwerk schließt nach 15 Minuten ohne Aktivität. Tippen und Eingaben halten es offen.',
+  'Category ID': 'Kategoriekennung',
+  'Category color': 'Kategoriefarbe',
+  'Remove': 'Entfernen',
+  'Working…': 'Wird ausgeführt…',
+  'Connection closed. Check the device screen; reopen setup if needed.':
+      'Verbindung geschlossen. Display prüfen und Einrichtung bei Bedarf erneut öffnen.',
+  'Feed authorization is checked after restart.':
+      'Der Kalenderzugriff wird nach dem Neustart geprüft.',
+  'Check the time zone and locale.': 'Zeitzone und Sprache der Datumsanzeige prüfen.',
+  'Setup connection unavailable.': 'Verbindung zur Einrichtung nicht verfügbar.',
+  'Install the configured signed firmware update?':
+      'Das konfigurierte signierte Firmwareupdate installieren?',
+  'Delete all device settings and cached appointments?':
+      'Alle Geräteeinstellungen und gespeicherten Termine löschen?',
+  'Requested. Check the device screen for progress.':
+      'Angefordert. Fortschritt auf dem Display prüfen.',
+  'Busy. Try again.': 'Beschäftigt. Bitte erneut versuchen.',
+  'Check Wi-Fi, feed URL/secret, preferences and category colors.':
+      'WLAN, Feed-Adresse, Kopplungsschlüssel, Einstellungen und Kategoriefarben prüfen.',
+  'Settings were not saved. Check storage diagnostics.':
+      'Einstellungen nicht gespeichert. Speicherdiagnose prüfen.',
+  'Saved; restart the device manually.': 'Gespeichert. Gerät manuell neu starten.',
+  'Saved. Restarting; reconnect to your usual Wi-Fi. If connection fails, hold Settings on the screen to correct it.':
+      'Gespeichert. Neustart; wieder mit dem Heim-WLAN verbinden. Bei Verbindungsproblemen Einstellungen am Display gedrückt halten.',
+  'Open setup from the device Wi-Fi network.': 'Einrichtung über das WLAN des Geräts öffnen.',
+  'Update unavailable: install a signed build once by USB.':
+      'Update nicht verfügbar: Einmal signierte Firmware per USB installieren.',
+  'Invalid action.': 'Ungültige Aktion.',
+  'Unknown action.': 'Unbekannte Aktion.',
+  'Type ERASE to confirm.': 'Zur Bestätigung ERASE eingeben.',
+  'Firmware': 'Firmware',
+  'Wi-Fi': 'WLAN',
+  'Time': 'Uhrzeit',
+  'Storage': 'Speicher',
+  'ready': 'bereit',
+  'fault': 'Fehler',
+  'connected': 'verbunden',
+  'disconnected': 'getrennt',
+  'synchronized': 'synchronisiert',
+  'unknown': 'unbekannt',
+  'Update': 'Update',
+  'available': 'verfügbar',
+  'not configured': 'nicht eingerichtet',
+  'Calendar synchronized': 'Kalender synchronisiert',
+  'Calendar: check pairing secret': 'Kalender: Kopplungsschlüssel prüfen',
+  'Calendar: authorize adapter again': 'Kalender: Adapter erneut autorisieren',
+  'Calendar exceeds capacity': 'Kalender überschreitet Kapazität',
+  'Calendar: unsupported preferences': 'Kalender: Einstellungen nicht unterstützt',
+  'Calendar temporarily unavailable': 'Kalender vorübergehend nicht verfügbar',
+  'Calendar request rejected': 'Kalenderanfrage abgelehnt',
+  'Calendar response invalid': 'Kalenderantwort ungültig'
+};
+const t = text => el('language').value === 'de' ? translations[text] || text : text;
+function routePlaceholder() {
+  return t(el('trafficProvider').value === 'open' ? 'Coordinates: 48.1234, 8.5678' : 'Street, city, country');
+}
+
+function refreshRoutePlaceholders() {
+  for (const row of el('routes').children)
+    for (const index of [1, 2]) row.children[index].children[0].placeholder = routePlaceholder();
+}
+
+const originalText = new WeakMap();
+const retainedSecrets = new Set();
+let savedSettings = null;
+let settingsReady = false;
+let settingsLoading = false;
+function translatePage() {
+  document.documentElement.lang = el('language').value;
+  document.title = t('PACE setup');
+  refreshRoutePlaceholders();
+  for (const id of retainedSecrets) el(id).placeholder = t('Saved — leave blank to keep');
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  let node;
+  while ((node = walker.nextNode())) {
+    if (['SCRIPT', 'STYLE'].includes(node.parentElement?.tagName)) continue;
+    let original = originalText.get(node) ?? node.textContent.trim();
+    if (!(original in translations))
+      original = Object.keys(translations).find(key => translations[key] === original);
+    if (!original) continue;
+    originalText.set(node, original);
+    node.textContent = t(original);
+  }
+}
+el('language').value = navigator.language.toLowerCase().startsWith('de') ? 'de' : 'en';
+el('language').onchange = translatePage;
+translatePage();
+
+el('zone').value = Intl.DateTimeFormat().resolvedOptions().timeZone;
+el('locale').value = navigator.language;
+el('profile').onchange = () => {
+  el('feed').hidden = el('profile').value === 'demo';
+};
+
+el('add').onclick = () => {
+  if (el('categories').children.length >= 8) return;
+  const row = document.createElement('div');
+  row.className = 'category';
+  const id = document.createElement('input');
+  id.placeholder = t('Category ID');
+  id.maxLength = 32;
+  id.setAttribute('aria-label', t('Category ID'));
+  const color = document.createElement('input');
+  color.type = 'color';
+  color.value = '#267e73';
+  color.setAttribute('aria-label', t('Category color'));
+  const remove = document.createElement('button');
+  remove.type = 'button';
+  remove.textContent = t('Remove');
+  remove.onclick = () => row.remove();
+  row.append(id, color, remove);
+  el('categories').append(row);
+};
+
+el('addRoute').onclick = () => {
+  if (el('routes').children.length >= 4) return;
+  const row = document.createElement('fieldset');
+  for (const [name, limit, endpoint] of [['Route name', 48, false], ['Origin (coordinates or Google address)', 128, true], ['Destination (coordinates or Google address)', 128, true]]) {
+    const caption = document.createElement('label');
+    caption.textContent = t(name);
+    const input = document.createElement('input');
+    input.maxLength = limit;
+    if (endpoint) input.placeholder = routePlaceholder();
+    caption.append(input);
+    row.append(caption);
+  }
+  const caption = document.createElement('label');
+  caption.textContent = t('Travel mode');
+  const mode = document.createElement('select');
+  for (const [value, name] of [['car', 'Car'], ['transit', 'Public transport']]) {
+    const option = document.createElement('option');
+    option.value = value;
+    option.textContent = t(name);
+    mode.append(option);
+  }
+  mode.value = 'car';
+  caption.append(mode);
+  row.append(caption);
+  const remove = document.createElement('button');
+  remove.type = 'button';
+  remove.textContent = t('Remove');
+  remove.onclick = () => row.remove();
+  row.append(remove);
+  el('routes').append(row);
+};
+
+el('trafficProvider').onchange = () => {
+  const open = el('trafficProvider').value === 'open';
+  el('openRouting').hidden = !open;
+  el('googleRouting').hidden = open;
+  refreshRoutePlaceholders();
+};
+
+function routeCoordinates(text) {
+  const number = '[+-]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)';
+  if (!new RegExp(`^ *${number} *, *${number} *$`).test(text)) return false;
+  const [lat, lon] = text.split(',').map(Number);
+  return Number.isFinite(lat) && Number.isFinite(lon) && Math.abs(lat) <= 90 && Math.abs(lon) <= 180;
+}
+
+function routingEndpoint(text) {
+  try {
+    const url = new URL(text);
+    return url.protocol === 'https:' && !url.username && !url.password && !url.search && !url.hash &&
+        text.length <= 256 && !/[\\\s]/.test(text);
+  } catch {
+    return false;
+  }
+}
+
+function privateValue(id) {
+  if ((id === 'password' && el('openNetwork').checked) ||
+      (id === 'updateSource' && el('clearUpdateSource').checked) ||
+      (id === 'trafficKey' && el('clearTrafficKey').checked)) return '';
+  return el(id).value || (retainedSecrets.has(id) ? null : '');
+}
+
+function config() {
+  if (!settingsReady) throw new Error('Could not load saved settings. Reconnect to PACE Wi-Fi and retry before saving.');
+  const minute = id => {
+    const [h, m] = el(id).value.split(':').map(Number);
+    return h * 60 + m;
+  };
+  const coordinate = id => el(id).value === '' ? null : Number(el(id).value);
+  const latitude = coordinate('latitude'), longitude = coordinate('longitude');
+  if (el('weather').checked && (!el('location').value.trim() ||
+      latitude === null || longitude === null || !Number.isFinite(latitude) || !Number.isFinite(longitude) ||
+      Math.abs(latitude) > 90 || Math.abs(longitude) > 180))
+    throw new Error('Weather needs a label and separate valid latitude and longitude values. Example: latitude 48.1234, longitude 8.5678.');
+  const routes = [...el('routes').children].map(row => ({
+    name: row.children[0].children[0].value.trim(),
+    origin: row.children[1].children[0].value.trim(),
+    destination: row.children[2].children[0].value.trim(),
+    mode: row.children[3].children[0].value
+  }));
+  const open = el('trafficProvider').value === 'open';
+  const contact = el('trafficContact').value.trim();
+  if (el('traffic').checked) {
+    if (routes.length < 1 || routes.some(route => !route.name || !route.origin || !route.destination))
+      throw new Error('Add one to four complete routes.');
+    if (open) {
+      if (routes.some(route => !routeCoordinates(route.origin) || !routeCoordinates(route.destination)))
+        throw new Error('Open routing needs latitude, longitude for both endpoints.');
+      if (!routingEndpoint(el('roadEndpoint').value) || !routingEndpoint(el('transitEndpoint').value) || !routingEndpoint(el('tileEndpoint').value))
+        throw new Error('Check the HTTPS routing server URLs.');
+      const validContact = !/[\s()]/.test(contact) &&
+          (routingEndpoint(contact) || /^[^@]+@[^@]+\.[^@.]+$/.test(contact));
+      if ((contact && !validContact) || (routes.some(route => route.mode === 'transit') && !validContact))
+        throw new Error('Enter a contact email or public website for the transit service.');
+    } else if (privateValue('trafficKey') !== null && !/^[A-Za-z0-9_-]+$/.test(privateValue('trafficKey'))) {
+      throw new Error('Check the Google Routes API key.');
+    }
+  }
+  const demo = el('profile').value === 'demo';
+  if (savedSettings && el('ssid').value !== savedSettings.wifi.ssid && privateValue('password') === null)
+    throw new Error('Enter the password for the new network, or select an open network.');
+  if (!demo && savedSettings && privateValue('secret') === null &&
+      (el('endpoint').value || el('profile').value !== savedSettings.calendar.transport_profile))
+    throw new Error('Enter the pairing secret for the changed adapter.');
+  new Intl.DateTimeFormat(el('locale').value, {timeZone: el('zone').value});
+  return {
+    schema_version: 1,
+    traffic: {
+      enabled: el('traffic').checked,
+      provider: el('trafficProvider').value,
+      api_key: privateValue('trafficKey'),
+      contact,
+      road_endpoint: el('roadEndpoint').value,
+      transit_endpoint: el('transitEndpoint').value,
+      tile_endpoint: el('tileEndpoint').value,
+      routes
+    },
+    updates: {manifest_url: privateValue('updateSource')},
+    wifi: {ssid: el('ssid').value, password: privateValue('password')},
+    calendar: {
+      transport_profile: el('profile').value,
+      endpoint: demo ? '' : privateValue('endpoint'),
+      device_token: demo ? '' : privateValue('secret')
+    },
+    preferences: {
+      time_zone: el('zone').value,
+      locale: el('locale').value,
+      hour_cycle: el('cycle').value,
+      temperature_unit: el('unit').value
+    },
+    weather: {
+      enabled: el('weather').checked,
+      location_label: el('location').value,
+      latitude,
+      longitude
+    },
+    ui: {
+      secondary_color: parseInt(el('secondaryColor').value.slice(1), 16),
+      language: el('language').value,
+      night_blanking_enabled: el('night').checked,
+      night_start: minute('nightStart'),
+      night_end: minute('nightEnd'),
+      category_styles: [...el('categories').children].map(
+          row => ({id: row.children[0].value, rgb: parseInt(row.children[1].value.slice(1), 16)}))
+    }
+  };
+}
+
+async function post(path, data) {
+  el('message').textContent = t('Working…');
+  try {
+    const response = await fetch(path, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 'X-PACE-CSRF': token},
+      body: JSON.stringify(data)
+    });
+    el('message').textContent = t(await response.text());
+  } catch {
+    el('message').textContent =
+        t('Connection closed. Check the device screen; reopen setup if needed.');
+  }
+}
+
+el('preview').onclick = () => {
+  try {
+    const c = config();
+    const zone = c.calendar.transport_profile === 'demo' ? 'UTC demo' : c.preferences.time_zone;
+    el('previewText').textContent = `${c.calendar.transport_profile} · ${zone} · ` +
+        `${c.preferences.locale} · °${c.preferences.temperature_unit}. ` +
+        t('Feed authorization is checked after restart.');
+  } catch (error) {
+    el('previewText').textContent = t(error.message in translations ? error.message : 'Check the time zone and locale.');
+  }
+};
+el('setup').onsubmit = event => {
+  event.preventDefault();
+  try {
+    post('/settings', config());
+  } catch (error) {
+    el('message').textContent = t(error.message in translations ? error.message : 'Check the time zone and locale.');
+  }
+};
+el('refresh').onclick = async () => {
+  try {
+    const response = await fetch('/diagnostics');
+    if (!response.ok) throw new Error('diagnostics');
+    const d = await response.json();
+    el('diagnostics').textContent =
+        `${t('Firmware')} ${d.version} · ${t('Wi-Fi')} ${t(d.network)} · ` +
+        `${t('Time')} ${t(d.time)} · ${t(d.calendar)} · ${t('Storage')} ${t(d.storage)} · ` +
+        `${t('Update')} ${t(d.ota_available ? 'available' : 'not configured')} · ${d.ota_result}`;
+    el('update').disabled = !d.ota_available || !d.ota_source || d.updating;
+    el('upload').disabled = !d.ota_available || d.updating;
+  } catch {
+    el('diagnostics').textContent = t('Setup connection unavailable.');
+  }
+};
+el('sync').onclick = () => post('/action', {action: 'sync'});
+el('update').onclick = () => {
+  if (confirm(t('Install the configured signed firmware update?'))) {
+    post('/action', {action: 'update'});
+  }
+};
+el('reset').onclick = () => {
+  if (el('confirmation').value === 'ERASE' &&
+      confirm(t('Delete all device settings and cached appointments?'))) {
+    post('/action', {action: 'reset', confirmation: 'ERASE'});
+  }
+};
+el('upload').onclick = () => {
+  const file = el('firmwareFile').files[0];
+  if (!file || file.size < 288 || file.size > 3 * 1024 * 1024) {
+    el('message').textContent = t('Select a firmware .bin file up to 3 MiB.');
+    return;
+  }
+  if (!confirm(t('Install this signed firmware file? Keep USB power connected.'))) return;
+  const request = new XMLHttpRequest();
+  request.open('POST', '/update');
+  request.setRequestHeader('Content-Type', 'application/octet-stream');
+  request.setRequestHeader('X-PACE-CSRF', token);
+  request.timeout = 370000;
+  el('upload').disabled = el('update').disabled = true;
+  el('uploadProgress').hidden = false;
+  el('uploadProgress').value = 0;
+  el('message').textContent = t('Uploading. Keep this page open and USB power connected.');
+  request.upload.onprogress = event => {
+    if (event.lengthComputable)
+      el('uploadProgress').value = Math.round(event.loaded * 100 / event.total);
+    if (event.loaded === event.total)
+      el('message').textContent = t('Upload sent. Verifying signature; check the device screen.');
+  };
+  request.onload = () => {
+    el('message').textContent = t(request.responseText);
+    if (request.status >= 400) el('refresh').onclick();
+  };
+  request.onerror = request.ontimeout = () => {
+    el('message').textContent =
+        t('Connection closed. Check the device screen; reopen setup if needed.');
+    el('refresh').onclick();
+  };
+  request.send(file);
+};
+function applySavedSettings(settings) {
+  savedSettings = settings;
+  const value = (id, item) => { if (item !== undefined && item !== null) el(id).value = String(item); };
+  const checked = (id, item) => { if (typeof item === 'boolean') el(id).checked = item; };
+  const color = rgb => `#${rgb.toString(16).padStart(6, '0')}`;
+  const time = minute => `${String(Math.floor(minute / 60)).padStart(2, '0')}:${String(minute % 60).padStart(2, '0')}`;
+  for (const [id, section, name] of [
+    ['password', 'wifi', 'password'], ['endpoint', 'calendar', 'endpoint'],
+    ['secret', 'calendar', 'device_token'], ['trafficKey', 'traffic', 'api_key'],
+    ['updateSource', 'updates', 'manifest_url']
+  ]) {
+    if (settings[section]?.[name] === null) retainedSecrets.add(id);
+    el(id).value = '';
+  }
+  el('clearTrafficKeyRow').hidden = !retainedSecrets.has('trafficKey');
+  value('ssid', settings.wifi.ssid);
+  value('profile', settings.calendar.transport_profile);
+  value('zone', settings.preferences.time_zone);
+  value('locale', settings.preferences.locale);
+  value('cycle', settings.preferences.hour_cycle);
+  value('unit', settings.preferences.temperature_unit);
+  const ui = settings.ui;
+  value('language', ui.language ?? (settings.preferences.locale.toLowerCase().startsWith('de') ? 'de' : 'en'));
+  checked('night', ui.night_blanking_enabled);
+  value('nightStart', time(ui.night_start));
+  value('nightEnd', time(ui.night_end));
+  if (ui.secondary_color !== undefined) value('secondaryColor', color(ui.secondary_color));
+  for (const category of ui.category_styles) {
+    el('add').onclick();
+    const row = el('categories').lastElementChild;
+    row.children[0].value = category.id;
+    row.children[1].value = color(category.rgb);
+  }
+  const weather = settings.weather;
+  checked('weather', weather.enabled);
+  value('location', weather.location_label);
+  value('latitude', weather.latitude);
+  value('longitude', weather.longitude);
+  const traffic = settings.traffic;
+  if (traffic) {
+    checked('traffic', traffic.enabled);
+    // Older enabled traffic settings without a provider used Google Routes.
+    value('trafficProvider', traffic.provider ?? (traffic.enabled ? 'google_routes' : 'open'));
+    value('trafficContact', traffic.contact);
+    value('roadEndpoint', traffic.road_endpoint);
+    value('transitEndpoint', traffic.transit_endpoint);
+    value('tileEndpoint', traffic.tile_endpoint);
+    for (const route of traffic.routes ?? []) {
+      el('addRoute').onclick();
+      const row = el('routes').lastElementChild;
+      for (const [index, key] of ['name', 'origin', 'destination', 'mode'].entries())
+        row.children[index].children[0].value = route[key];
+    }
+  }
+  el('profile').onchange();
+  el('trafficProvider').onchange();
+  translatePage();
+}
+
+async function loadSettings() {
+  if (settingsLoading) return;
+  settingsLoading = true;
+  settingsReady = false;
+  el('settingsFields').disabled = true;
+  el('language').disabled = true;
+  el('loadSettings').hidden = true;
+  el('settingsStatus').textContent = t('Loading saved settings…');
+  try {
+    const response = await fetch('/settings', {headers: {'X-PACE-CSRF': token}, cache: 'no-store', signal: AbortSignal.timeout(10000)});
+    if (!response.ok) throw new Error('settings');
+    const settings = await response.json();
+    // Reset before a retry, never append duplicate category/route rows.
+    retainedSecrets.clear();
+    el('categories').replaceChildren();
+    el('routes').replaceChildren();
+    if (settings.schema_version === 1) applySavedSettings(settings);
+    else if (settings.configured !== false) throw new Error('settings');
+    settingsReady = true;
+    el('settingsFields').disabled = false;
+    el('settingsStatus').textContent = t(settings.schema_version === 1 ?
+        'Saved settings loaded. Change only what you need.' : 'No settings saved yet. Complete the fields below.');
+  } catch {
+    el('settingsStatus').textContent = t('Could not load saved settings. Reconnect to PACE Wi-Fi and retry before saving.');
+    el('loadSettings').hidden = false;
+  } finally {
+    settingsLoading = false;
+    el('language').disabled = false;
+  }
+}
+
+// Renew only on real interaction, at most once every 30 seconds. An idle tab still expires.
+let lastActivitySent = 0;
+function keepSetupOpen() {
+  const now = Date.now();
+  if (document.hidden || now - lastActivitySent < 30000) return;
+  lastActivitySent = now;
+  fetch('/activity', {
+    method: 'POST', headers: {'Content-Type': 'application/json', 'X-PACE-CSRF': token},
+    signal: AbortSignal.timeout(5000)
+  }).catch(() => {});
+}
+for (const event of ['input', 'pointerdown', 'keydown']) document.addEventListener(event, keepSetupOpen);
+el('loadSettings').onclick = loadSettings;
+const initialSettings = loadSettings();
+el('refresh').onclick();
+</script></html>

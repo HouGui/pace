@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1340" height="850" viewBox="0 0 1340 850" role="img"><title>PACE module-level circuit sketch: integrated color display and SHT40 sensor</title><rect width="100%" height="100%" fill="#fff"/><style>text{font-family:DejaVu Sans,Arial,sans-serif} path{stroke-linecap:round;stroke-linejoin:round}</style>
+<text x="45" y="54" font-size="32" font-weight="bold" fill="#172b36" text-anchor="start">PACE / four-wire sensor connection</text>
+<text x="45" y="87" font-size="19" font-weight="normal" fill="#172b36" text-anchor="start">Reference: Waveshare ESP32-S3-Touch-LCD-7 (27078) + Adafruit SHT40 (4885)</text>
+<rect x="45" y="111" width="1250" height="53" rx="10" fill="#fff4dc" stroke="#dbb45a" stroke-width="2"/>
+<text x="65" y="145" font-size="20" font-weight="bold" fill="#172b36" text-anchor="start">Unplug USB before wiring. Select 3.3 V at H2. Match signal labels, never assume wire colors.</text>
+<rect x="55" y="198" width="505" height="452" rx="10" fill="#f3f6f8" stroke="#bdcbd2" stroke-width="2"/>
+<text x="80" y="232" font-size="23" font-weight="bold" fill="#172b36" text-anchor="start">Integrated screen + controller</text>
+<text x="80" y="261" font-size="17" font-weight="normal" fill="#172b36" text-anchor="start">V1.2 reference — do not rewire</text>
+<rect x="80" y="282" width="180" height="65" rx="5" fill="#dceaf2" stroke="#829dab" stroke-width="2"/>
+<text x="170" y="309" font-size="22" font-weight="bold" fill="#172b36" text-anchor="middle">ESP32-S3</text>
+<text x="170" y="333" font-size="16" font-weight="normal" fill="#172b36" text-anchor="middle">8 MB PSRAM</text>
+<rect x="325" y="282" width="210" height="65" rx="5" fill="#dceaf2" stroke="#829dab" stroke-width="2"/>
+<text x="430" y="309" font-size="21" font-weight="bold" fill="#172b36" text-anchor="middle">800 × 480 LCD</text>
+<text x="430" y="333" font-size="15" font-weight="normal" fill="#172b36" text-anchor="middle">RGB + GT911 touch</text>
+<path d="M 260 314 H 325" fill="none" stroke="#315d75" stroke-width="2"/>
+<text x="292" y="300" font-size="13" font-weight="normal" fill="#172b36" text-anchor="middle">RGB</text>
+<text x="80" y="383" font-size="18" font-weight="bold" fill="#172b36" text-anchor="start">Shared I²C bus:</text>
+<text x="80" y="411" font-size="17" font-weight="normal" fill="#172b36" text-anchor="start">GT911 touch + CH422G</text>
+<text x="80" y="439" font-size="17" font-weight="normal" fill="#172b36" text-anchor="start">Touch IRQ: GPIO4</text>
+<text x="80" y="467" font-size="20" font-weight="bold" fill="#8b5b00" text-anchor="start">H2 → 3.3 V</text>
+<text x="80" y="496" font-size="16" font-weight="normal" fill="#172b36" text-anchor="start">Onboard level shifting</text>
+<text x="80" y="522" font-size="16" font-weight="normal" fill="#172b36" text-anchor="start">and bus pull-ups</text>
+<text x="80" y="601" font-size="18" font-weight="bold" fill="#172b36" text-anchor="start">USB-to-UART · selector = UART1</text>
+<rect x="325" y="360" width="210" height="195" rx="5" fill="#fff" stroke="#8c9da6" stroke-width="2"/>
+<text x="430" y="388" font-size="18" font-weight="bold" fill="#172b36" text-anchor="middle">H1 · external I²C</text>
+<rect x="935" y="345" width="360" height="238" rx="10" fill="#edf5ef" stroke="#91b69b" stroke-width="2"/>
+<text x="958" y="379" font-size="24" font-weight="bold" fill="#172b36" text-anchor="start">SHT40 / Adafruit 4885</text>
+<text x="958" y="406" font-size="17" font-weight="normal" fill="#172b36" text-anchor="start">STEMMA QT · address 0x44</text>
+<text x="520" y="438" font-size="18" font-weight="normal" fill="#172b36" text-anchor="end">VCC (3.3 V)</text>
+<text x="958" y="438" font-size="18" font-weight="normal" fill="#172b36" text-anchor="start">VIN / QT power</text>
+<path d="M 535 432 H 935" fill="none" stroke="#b84a40" stroke-width="3"/>
+<circle cx="535" cy="432" r="4" fill="#b84a40"/>
+<circle cx="935" cy="432" r="4" fill="#b84a40"/>
+<text x="520" y="473" font-size="18" font-weight="normal" fill="#172b36" text-anchor="end">GND</text>
+<text x="958" y="473" font-size="18" font-weight="normal" fill="#172b36" text-anchor="start">GND</text>
+<path d="M 535 467 H 935" fill="none" stroke="#53636d" stroke-width="3"/>
+<circle cx="535" cy="467" r="4" fill="#53636d"/>
+<circle cx="935" cy="467" r="4" fill="#53636d"/>
+<text x="520" y="508" font-size="18" font-weight="normal" fill="#172b36" text-anchor="end">SDA (GPIO8)</text>
+<text x="958" y="508" font-size="18" font-weight="normal" fill="#172b36" text-anchor="start">SDA</text>
+<path d="M 535 502 H 935" fill="none" stroke="#2877a7" stroke-width="3"/>
+<circle cx="535" cy="502" r="4" fill="#2877a7"/>
+<circle cx="935" cy="502" r="4" fill="#2877a7"/>
+<text x="520" y="543" font-size="18" font-weight="normal" fill="#172b36" text-anchor="end">SCL (GPIO9)</text>
+<text x="958" y="543" font-size="18" font-weight="normal" fill="#172b36" text-anchor="start">SCL</text>
+<path d="M 535 537 H 935" fill="none" stroke="#8a670f" stroke-width="3"/>
+<circle cx="535" cy="537" r="4" fill="#8a670f"/>
+<circle cx="935" cy="537" r="4" fill="#8a670f"/>
+<text x="746" y="385" font-size="19" font-weight="bold" fill="#172b36" text-anchor="middle">Plug-in harness join</text>
+<text x="746" y="410" font-size="15" font-weight="normal" fill="#172b36" text-anchor="middle">Male board leads → female sockets</text>
+<rect x="730" y="425" width="24" height="14" rx="2" fill="#fff" stroke="#53636d" stroke-width="2"/>
+<rect x="730" y="460" width="24" height="14" rx="2" fill="#fff" stroke="#53636d" stroke-width="2"/>
+<rect x="730" y="495" width="24" height="14" rx="2" fill="#fff" stroke="#53636d" stroke-width="2"/>
+<rect x="730" y="530" width="24" height="14" rx="2" fill="#fff" stroke="#53636d" stroke-width="2"/>
+<text x="590" y="610" font-size="19" font-weight="normal" fill="#172b36" text-anchor="start">HY2.0 cable (included) + QT female cable (4397)</text>
+<text x="590" y="637" font-size="18" font-weight="normal" fill="#172b36" text-anchor="start">≈25 cm total · retain and insulate each connection</text>
+<rect x="55" y="678" width="505" height="80" rx="8" fill="#e8eef3" stroke="#8c9da6" stroke-width="2"/>
+<text x="80" y="708" font-size="22" font-weight="bold" fill="#172b36" text-anchor="start">5 V USB supply · at least 2 A</text>
+<text x="80" y="737" font-size="17" font-weight="normal" fill="#172b36" text-anchor="start">USB data/power cable; one power input only</text>
+<path d="M 305 678 V 650" fill="none" stroke="#53636d" stroke-width="5"/>
+<text x="590" y="699" font-size="18" font-weight="normal" fill="#172b36" text-anchor="start">Sensor: integrated vented cradle below the display.</text>
+<text x="590" y="730" font-size="18" font-weight="normal" fill="#172b36" text-anchor="start">No external button, breadboard or outdoor probe needed.</text>
+<text x="45" y="804" font-size="18" font-weight="normal" fill="#172b36" text-anchor="start">Signal-level sketch, not a connector-face pinout. Verify H1/H2 labels on the purchased revision.</text>
+<text x="45" y="830" font-size="16" font-weight="normal" fill="#172b36" text-anchor="start">Complete assembly sequence and primary references: hardware/wiring.md</text>
+</svg>

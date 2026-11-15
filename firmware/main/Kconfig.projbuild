@@ -1,0 +1,15 @@
+menu "PACE"
+config PACE_OTA_MANIFEST_URL
+    string "Default HTTPS update manifest URL (optional)"
+    default ""
+    help
+        Optional default; a URL saved through local setup takes precedence.
+        Leave empty to use signed-file uploads without hosting. HTTPS images
+        must share the manifest origin. All OTA paths require signed-app verification.
+config PACE_GUI_ROTATE_180
+    bool "Rotate display and touch by 180 degrees for enclosure A"
+    default y
+    help
+        Fits the reference enclosure orientation. Disable for the panel's native
+        orientation on the bench. Uses in-place rotation of partial draw buffers.
+endmenu

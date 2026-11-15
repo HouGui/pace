@@ -1,0 +1,15 @@
+{
+  "code": "Ok",
+  "routes": [
+    {
+      "duration": 1234.5,
+      "distance": 18500.25,
+      "geometry": "__upzA__hgN_ibE_ibE~s`B_ibE",
+      "legs": [
+        {
+          "summary": "Synthetic road"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "pace-outlook-adapter",
+  "version": "0.2.0",
+  "private": true,
+  "license": "MIT",
+  "engines": {"node": ">=22"},
+  "scripts": {"configure": "node configure.mjs", "login": "node server.mjs --login", "start": "node server.mjs"},
+  "dependencies": {"@azure/msal-node": "7.2.1"}
+}

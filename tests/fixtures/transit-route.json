@@ -1,0 +1,32 @@
+{
+  "itineraries": [
+    {
+      "duration": 1800,
+      "startTime": "2030-03-08T10:30:00Z",
+      "endTime": "2030-03-08T11:00:00Z",
+      "transfers": 0,
+      "legs": [
+        {
+          "mode": "BUS",
+          "realTime": true,
+          "cancelled": false,
+          "displayName": "Test Bus 1",
+          "from": {
+            "lat": 48,
+            "lon": 8
+          },
+          "to": {
+            "lat": 48.05,
+            "lon": 8.2
+          },
+          "alerts": [
+            {
+              "headerText": "Synthetic advisory",
+              "descriptionText": "Test details\nSecond line"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "wifi": {
+    "ssid": "Example Wi-Fi",
+    "password": ""
+  },
+  "calendar": {
+    "transport_profile": "demo",
+    "endpoint": "",
+    "device_token": ""
+  },
+  "preferences": {
+    "time_zone": "Etc/UTC",
+    "locale": "en-GB",
+    "hour_cycle": "h23",
+    "temperature_unit": "C"
+  },
+  "weather": {
+    "enabled": false,
+    "location_label": "",
+    "latitude": null,
+    "longitude": null
+  },
+  "ui": {
+    "category_styles": [],
+    "night_blanking_enabled": false,
+    "night_start": 1320,
+    "night_end": 420,
+    "secondary_color": 7492006
+  },
+  "updates": {
+    "manifest_url": ""
+  },
+  "traffic": {
+    "enabled": false,
+    "api_key": "",
+    "routes": [],
+    "provider": "open",
+    "contact": "",
+    "road_endpoint": "https://routing.openstreetmap.de/routed-car",
+    "transit_endpoint": "https://api.transitous.org/api/v6/plan",
+    "tile_endpoint": "https://tile.openstreetmap.org"
+  }
+}

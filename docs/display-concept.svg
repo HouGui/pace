@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="480" viewBox="0 0 800 480" role="img"><title>PACE color agenda concept: synthetic family appointments and temperature values</title><rect width="100%" height="100%" fill="#fff"/><style>text{font-family:DejaVu Sans,Arial,sans-serif} path{stroke-linecap:round;stroke-linejoin:round}</style>
+<rect x="0" y="0" width="800" height="480" rx="0" fill="#f4f6fa" stroke="#f4f6fa" stroke-width="2"/>
+<text x="20" y="35" font-size="27" font-weight="bold" fill="#172b36" text-anchor="start">OUR WEEK</text>
+<text x="780" y="33" font-size="19" font-weight="bold" fill="#172b36" text-anchor="end">MON 07 JAN 2030 · 16:45</text>
+<rect x="16" y="50" width="768" height="73" rx="9" fill="#e7efff" stroke="#3173c5" stroke-width="2"/>
+<rect x="28" y="62" width="85" height="25" rx="5" fill="#245fa6" stroke="#245fa6" stroke-width="2"/>
+<text x="70" y="80" font-size="16" font-weight="bold" fill="#fff" text-anchor="middle">NEXT</text>
+<text x="125" y="83" font-size="27" font-weight="bold" fill="#172b36" text-anchor="start">Alex · Swimming</text>
+<text x="769" y="81" font-size="22" font-weight="bold" fill="#245fa6" text-anchor="end">in 15 min</text>
+<text x="29" y="111" font-size="19" font-weight="normal" fill="#172b36" text-anchor="start">17:00–18:00 · Today</text>
+<text x="768" y="110" font-size="15" font-weight="normal" fill="#526479" text-anchor="end">Tap for details</text>
+<rect x="16" y="135" width="376" height="59" rx="6" fill="#fff" stroke="#aac2e4" stroke-width="2"/>
+<path d="M 23 145 V 184" fill="none" stroke="#245fa6" stroke-width="5"/>
+<text x="34" y="156" font-size="15" font-weight="bold" fill="#526479" text-anchor="start">TODAY · MON 07</text>
+<text x="34" y="183" font-size="24" font-weight="normal" fill="#172b36" text-anchor="start">17:00  Alex · Swim</text>
+<rect x="16" y="200" width="376" height="59" rx="6" fill="#fff" stroke="#dce2ea" stroke-width="2"/>
+<path d="M 23 210 V 249" fill="none" stroke="#7244a4" stroke-width="5"/>
+<text x="34" y="221" font-size="15" font-weight="bold" fill="#526479" text-anchor="start">TUE 08</text>
+<text x="34" y="248" font-size="24" font-weight="normal" fill="#172b36" text-anchor="start">18:30  Family dinner</text>
+<rect x="16" y="265" width="376" height="59" rx="6" fill="#fff" stroke="#dce2ea" stroke-width="2"/>
+<path d="M 23 275 V 314" fill="none" stroke="#24704b" stroke-width="5"/>
+<text x="34" y="286" font-size="15" font-weight="bold" fill="#526479" text-anchor="start">WED 09</text>
+<text x="34" y="313" font-size="24" font-weight="normal" fill="#172b36" text-anchor="start">All day  Sam · Trip</text>
+<rect x="16" y="330" width="376" height="59" rx="6" fill="#fff" stroke="#dce2ea" stroke-width="2"/>
+<path d="M 23 340 V 379" fill="none" stroke="#9b5610" stroke-width="5"/>
+<text x="34" y="351" font-size="15" font-weight="bold" fill="#526479" text-anchor="start">THU 10</text>
+<text x="34" y="378" font-size="24" font-weight="normal" fill="#172b36" text-anchor="start">16:00  Mia · Music</text>
+<rect x="408" y="135" width="376" height="59" rx="6" fill="#fff" stroke="#dce2ea" stroke-width="2"/>
+<path d="M 415 145 V 184" fill="none" stroke="#245fa6" stroke-width="5"/>
+<text x="426" y="156" font-size="15" font-weight="bold" fill="#526479" text-anchor="start">FRI 11</text>
+<text x="426" y="183" font-size="24" font-weight="normal" fill="#172b36" text-anchor="start">15:30  Alex · Library</text>
+<rect x="408" y="200" width="376" height="59" rx="6" fill="#fff" stroke="#dce2ea" stroke-width="2"/>
+<path d="M 415 210 V 249" fill="none" stroke="#7244a4" stroke-width="5"/>
+<text x="426" y="221" font-size="15" font-weight="bold" fill="#526479" text-anchor="start">SAT 12 · +1 MORE</text>
+<text x="426" y="248" font-size="24" font-weight="normal" fill="#172b36" text-anchor="start">10:00  Family · Park</text>
+<rect x="408" y="265" width="376" height="59" rx="6" fill="#fff" stroke="#dce2ea" stroke-width="2"/>
+<path d="M 415 275 V 314" fill="none" stroke="#7f8b98" stroke-width="5"/>
+<text x="426" y="286" font-size="15" font-weight="bold" fill="#526479" text-anchor="start">SUN 13</text>
+<text x="426" y="313" font-size="24" font-weight="normal" fill="#526479" text-anchor="start">No appointments</text>
+<text x="421" y="352" font-size="16" font-weight="normal" fill="#172b36" text-anchor="start">Colors + names identify categories.</text>
+<text x="421" y="376" font-size="16" font-weight="normal" fill="#172b36" text-anchor="start">Tap a day for its complete agenda.</text>
+<rect x="16" y="402" width="768" height="61" rx="6" fill="#e7edf2" stroke="#dce2ea" stroke-width="2"/>
+<text x="29" y="429" font-size="16" font-weight="normal" fill="#172b36" text-anchor="start">Inside</text>
+<text x="97" y="447" font-size="29" font-weight="bold" fill="#172b36" text-anchor="start">21.5 °C</text>
+<text x="264" y="429" font-size="16" font-weight="normal" fill="#172b36" text-anchor="start">Outside · Demo town</text>
+<text x="264" y="453" font-size="25" font-weight="bold" fill="#172b36" text-anchor="start">8.2 °C</text>
+<text x="769" y="425" font-size="14" font-weight="normal" fill="#526479" text-anchor="end">Calendar synced 16:40</text>
+<text x="769" y="445" font-size="14" font-weight="normal" fill="#526479" text-anchor="end">Weather: Open-Meteo · 16:30</text>
+<text x="20" y="477" font-size="11" font-weight="normal" fill="#526479" text-anchor="start">Layout concept · synthetic events and temperatures · no live service connected</text>
+</svg>

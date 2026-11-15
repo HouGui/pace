@@ -1,0 +1,20 @@
+# SPDX-License-Identifier: MIT
+config PACE_UI_DEPENDENCIES
+    bool
+    default y
+    select LV_USE_BUTTON
+    select LV_USE_LABEL
+    select LV_USE_LINE
+    select LV_USE_BAR
+    select LV_USE_SLIDER
+    select LV_USE_IMAGE
+    select LV_USE_CANVAS
+    select LV_USE_FLEX
+    select LV_USE_QRCODE
+    select LV_USE_LODEPNG
+    select LV_FONT_MONTSERRAT_16
+    select LV_FONT_MONTSERRAT_24
+    help
+        Required by PACE's compiled display code. Select dependencies here so
+        upgrades also enable them in an existing sdkconfig; defaults alone
+        do not override previously saved disabled options.

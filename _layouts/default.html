@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="{{ site.description | escape }}">
+  <title>{{ page.title | default: site.title | escape }} · PACE</title>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, sans-serif; color: #20343b; background: #fff; }
+    body { max-width: 72rem; margin: auto; padding: 0 1.25rem; line-height: 1.65; }
+    header { padding: 1.25rem 0; border-bottom: 1px solid #dbe5e4; }
+    nav { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; align-items: center; }
+    nav strong { font-size: 1.4rem; }
+    a { color: #11665d; text-underline-offset: .15em; }
+    a:hover { color: #073f39; }
+    a:focus-visible { outline: 3px solid #11665d; outline-offset: 4px; }
+    main { padding: 1rem 0 3rem; overflow-wrap: anywhere; }
+    h1, h2, h3 { line-height: 1.25; scroll-margin-top: 1rem; }
+    h1 { font-size: 2.2rem; } h2 { margin-top: 2rem; }
+    p, li { max-width: 85ch; }
+    li + li { margin-top: .4rem; }
+    img, svg { max-width: 100%; height: auto; }
+    table { display: block; overflow-x: auto; border-collapse: collapse; margin: 1.5rem 0; }
+    th, td { border: 1px solid #dbe5e4; padding: .6rem .8rem; text-align: left; vertical-align: top; }
+    th { background: #edf4f2; }
+    pre, code { font-family: ui-monospace, monospace; font-size: .9em; background: #f0f4f4; }
+    code { padding: .12em .3em; border-radius: .2rem; }
+    pre { padding: 1rem; overflow-x: auto; border-radius: .4rem; }
+    pre code { padding: 0; }
+    blockquote { margin-left: 0; padding-left: 1rem; border-left: 3px solid #a5c7c0; }
+    footer { padding: 1rem 0 2rem; border-top: 1px solid #dbe5e4; color: #51646a; font-size: .9rem; }
+    .skip { position: absolute; top: -4rem; } .skip:focus { top: .5rem; background: white; }
+    @media (max-width: 600px) { body { padding: 0 1rem; } h1 { font-size: 1.8rem; } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#content">Skip to content</a>
+  <header><nav aria-label="Documentation">
+    <a href="{{ '/' | relative_url }}"><strong>PACE</strong></a>
+    <a href="{{ '/docs/development.html' | relative_url }}">Get started</a>
+    <a href="{{ '/docs/adapters.html' | relative_url }}">Calendar and routes</a>
+    <a href="{{ '/hardware/BOM.html' | relative_url }}">Hardware</a>
+    <a href="{{ '/docs/verification.html' | relative_url }}">Test status</a>
+    <a href="{{ site.github.repository_url }}">Source</a>
+  </nav></header>
+  <main id="content">{{ content }}</main>
+  <footer>PACE · Documentation built from the repository's Markdown files. <a href="{{ site.github.repository_url }}/blob/main/LICENSE">MIT license</a>.</footer>
+</body>
+</html>

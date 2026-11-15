@@ -1,0 +1,65 @@
+# ESP-IDF and local builds. Keep defaults and dependency lock files tracked.
+/build/
+/build-*/
+firmware/build/
+firmware/build-*/
+firmware/managed_components/
+firmware/sdkconfig
+firmware/sdkconfig.old
+compile_commands.json
+*.o
+*.a
+*.elf
+*.map
+*.bin
+
+# Local tooling/editor state
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.cache/
+.jekyll-cache/
+.jekyll-metadata
+_site/
+.sass-cache/
+node_modules/
+token-cache.local.json.tmp
+.vscode/
+.idea/
+.DS_Store
+*~
+*.swp
+
+# Owner-only purchasing notes and other local files; exclude from release archives too.
+/local/
+
+# Local configuration, credentials and private data
+secrets/
+private/
+credentials/
+.env
+.env.*
+!.env.example
+*.local.json
+*credentials*.json
+*token*.json
+*.key
+*.pem
+*.p12
+*.pfx
+# Public certificates may be reviewed and explicitly tracked here later.
+!firmware/certs/*.pem
+*.ics
+*.ical
+*.pcap
+*.pcapng
+*.dump
+*.log
+/core
+/core.[0-9]*
+
+# Owner-specific Apps Script tooling state
+.clasp.json
+.clasprc.json
